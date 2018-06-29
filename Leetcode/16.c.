@@ -1,0 +1,80 @@
+//
+//  main.c
+//  Leetcode
+//
+//  Created by wecash on 2018/6/21.
+//  Copyright © 2018年 wecash. All rights reserved.
+//
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <unistd.h>
+
+
+int compare_int( const void* a, const void* b )
+{
+    if( *(int*)a == *(int*)b ) return 0;
+    return *(int*)a < *(int*)b ? -1 : 1;
+}
+
+struct Couple {
+    int a;
+    int b;
+    struct Couple *next;
+} typedef Couple;
+
+
+int twoSum(int* nums, int numSize, int target);
+int findClosestNum(int *nums, int numSize, int target);
+
+
+int threeSumClosest(int* nums, int numsSize, int target) {
+    int min = target - 100000, last = 0x7fffffff;
+    qsort(nums, numsSize, sizeof(int), compare_int);
+    for (int i = 0; i < numsSize - 2; i++) {
+        int val = nums[i];
+        if (val == last) {
+            continue;
+        }
+        int innerTarget = target - val;
+        int sum = twoSum((nums + i + 1), numsSize - i - 1, innerTarget) + val;
+        int distance = abs(sum - target);
+        int minDistance = abs(min - target);
+        min = distance < minDistance ? sum : min;
+        last = val;
+    }
+    return min;
+}
+
+int twoSum(int* nums, int numSize, int target) {
+    int min = target - 100000;
+    for (int i = 0; i < numSize - 1; i++) {
+        int val = nums[i];
+        int left = findClosestNum((nums + i + 1), numSize - i - 1, target - val);
+        int distance = abs(val + left - target);
+        int minDistance = abs(min - target);
+        min = distance < minDistance ? val + left : min;
+    }
+    return min;
+}
+
+int findClosestNum(int *nums, int numSize, int target) {
+    int min = target - 10000;
+    for (int i = 0; i < numSize; i++) {
+        int val = nums[i];
+        int distance = abs(val - target);
+        int minDistance = abs(min - target);
+        min = distance < minDistance ? val : min;
+    }
+    return min;
+}
+
+int main(int argc, const char * argv[]) {
+    // insert code here...
+    int arr[4] = {-1,2,1,-4};
+    int result = threeSumClosest(arr, 4, 1);
+    printf("%d\n", result);
+    return 0;
+}
