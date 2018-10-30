@@ -17,19 +17,18 @@ char** letterCombinations(char* digits, int* returnSize) {
     if (!len) {
         return NULL;
     }
-    char **result = malloc(sizeof(char *) * (*returnSize));
-    int size = *returnSize;
+    char **result = malloc(sizeof(char *) * (10000));
     char map[9][5] = {"", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
     int sizeMap[9] = {0, 3, 3, 3, 3, 3, 4, 3, 4};
-    int sizeCount[1000] = {};
-    int sizeLimit[1000] = {};
+    int sizeCount[10000] = {};
+    int sizeLimit[10000] = {};
     for (int i = 0; i < len; i ++) {
         sizeCount[i] = 0;
         int val = digits[i] - '0';
-        sizeLimit[i] = sizeMap[val];
+        sizeLimit[i] = sizeMap[val - 1];
     }
-    int finish = 0;
-    while (size-- > 0 && !finish) {
+    int finish = 0, size = 0;
+    while (!finish) {
         char *newChar = malloc(sizeof(char) * (len + 1));
         for (int i = 0; i < len; i++) {
             int val = digits[i] - '0';
@@ -50,20 +49,23 @@ char** letterCombinations(char* digits, int* returnSize) {
                 finish = 1;
             }
         }
-        result[size] = newChar;
+        newChar[len] = '\0';
+        result[size++] = newChar;
     }
+    *returnSize = size;
     return result;
 }
 
 
 int main(int argc, const char * argv[]) {
     // insert code here...
-    int size = 9;
+    int size = 0;
 //    char test = '0' - 48;
 //    printf("%c\n", test);
 //    return 0;
     char **result = letterCombinations("23", &size);
     int i = 0;
+    printf("%d\n", size);
     while (i < size) {
         char *val = result[i];
         printf("%s\n", val);

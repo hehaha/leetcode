@@ -10,17 +10,24 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-bool containsNearbyDuplicate(int* nums, int numsSize, int k) {
-    bool find = false;
-    for (int i = 0; i <= numsSize - k; i++) {
-        int val = nums[i];
-        int nextVal = nums[i + k];
-        if (val == nextVal) {
-            find = true;
-            break;
-        }
+struct ListNode {
+    int val;
+    struct ListNode *next;
+};
+
+
+struct ListNode* middleNode(struct ListNode* head) {
+    int len = 0;
+    struct ListNode* node = head;
+    while (++len && node->next) {
+        node = node->next;
     }
-    return find;
+    int pos = len / 2;
+    node = head;
+    while (pos--) {
+        node = node->next;
+    }
+    return node;
 }
 
 
